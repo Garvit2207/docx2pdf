@@ -1,0 +1,57 @@
+name: Build and Deploy Docker Image
+
+on:
+  push:
+    branches:
+      - main  # Trigger build on push to the main branch
+  pull_request:
+    branches:
+      - main  # Trigger build on pull request to main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Step 1: Checkout the repository
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    # Step 2: Set up Docker Buildx
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+
+    # Step 3: Cache Docker layers for faster builds
+    - name: Cache Docker layers
+      uses: actions/cache@v3
+      with:
+        path: /tmp/.buildx-cache
+        key: ${{ runner.os }}-docker-${{ github.sha }}
+        restore-keys: |
+          ${{ runner.os }}-docker-
+
+    # Step 4: Log into Docker Hub (or another registry)
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
+    # Step 5: Build the Docker image
+    - name: Build Docker image
+      run: |
+        docker build -t yourdockerhubusername/word2pdf:${{ github.sha }} .
+
+    # Step 6: Push the Docker image to Docker Hub (or another registry)
+    - name: Push Docker image
+      run: |
+        docker push yourdockerhubusername/word2pdf:${{ github.sha }}
+
+  # Optional: Deploy step (e.g., using Docker on a server or cloud service)
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      # Add deployment steps if necessary (e.g., SSH into server, run docker pull, docker-compose up)
+      - name: Deploy application
+        run: echo "Deploy step here"
