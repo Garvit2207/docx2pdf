@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Variables
-IMAGE_NAME="garvit2207/docx2pdf-try:latest"  # Docker image name
+IMAGE_NAME="garvit2207/docx2pdf-try"  # Docker image name
 PORT=5000                                    # Port to expose
 UPLOAD_DIR="$(pwd)/uploads"                  # Directory to store uploaded files
 
