@@ -64,7 +64,7 @@ The server will run on [http://localhost:4000](http://localhost:4000) by default
 
 After conversion, the following metadata is added to the PDF:
 - **Title**: "Converted DOCX to PDF"
-- **Keywords**: `["filename.docx", "12345"]` (filename and file size in bytes).
+- **Keywords**: `["filename.docx", "12345"]` (filename and file size in KB).
 
 ## Future Enhancements
 
