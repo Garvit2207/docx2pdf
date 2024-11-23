@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOCX to PDF Converter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            text-align: center;
+        }
+        input[type="file"] {
+            margin: 20px 0;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 10px 0;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .metadata {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>DOCX to PDF Converter</h1>
+        <form id="uploadForm">
+            <input type="file" id="fileInput" accept=".docx" required>
+            <button type="submit">Upload & Convert</button>
+        </form>
+        <div id="metadata" class="metadata" style="display: none;">
+            <h3>File Metadata</h3>
+            <p><strong>File Name:</strong> <span id="fileName"></span></p>
+            <p><strong>File Size:</strong> <span id="fileSize"></span> KB</p>
+            <a id="downloadLink" href="#" download style="display: none;">
+                <button>Download PDF</button>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        const uploadForm = document.getElementById('uploadForm');
+        const fileInput = document.getElementById('fileInput');
+        const metadataDiv = document.getElementById('metadata');
+        const fileNameSpan = document.getElementById('fileName');
+        const fileSizeSpan = document.getElementById('fileSize');
+        const downloadLink = document.getElementById('downloadLink');
+
+        uploadForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const file = fileInput.files[0];
+            if (!file) {
+                alert('Please select a DOCX file.');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            try {
+                const response = await fetch('/convert', {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to upload and convert file.');
+                }
+
+                const data = await response.json();
+
+                // Display metadata
+                fileNameSpan.textContent = data.fileName;
+                fileSizeSpan.textContent = data.fileSizeKb;
+                downloadLink.href = data.downloadUrl;
+                downloadLink.style.display = 'block';
+                metadataDiv.style.display = 'block';
+            } catch (error) {
+                alert(error.message);
+            }
+        });
+    </script>
+</body>
+</html>
