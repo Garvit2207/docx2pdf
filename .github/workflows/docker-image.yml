@@ -40,12 +40,12 @@ jobs:
     # Step 5: Build the Docker image
     - name: Build Docker image
       run: |
-        docker build -t yourdockerhubusername/word2pdf:${{ github.sha }} .
+        docker build -t garvit2207/docx2pdf-try:latest .
 
     # Step 6: Push the Docker image to Docker Hub
     - name: Push Docker image
       run: |
-        docker push yourdockerhubusername/word2pdf:${{ github.sha }}
+        docker push garvit2207/docx2pdf-try:latest
 
   # Optional: Deploy step (e.g., using Docker on a server or cloud service)
   deploy:
