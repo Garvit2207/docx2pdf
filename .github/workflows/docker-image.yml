@@ -3,10 +3,10 @@ name: Build and Deploy Docker Image
 on:
   push:
     branches:
-      - main  # Trigger build on push to the main branch
+      - master  # Trigger build on push to the master branch
   pull_request:
     branches:
-      - main  # Trigger build on pull request to main
+      - master  # Trigger build on pull request to master
 
 jobs:
   build:
@@ -30,7 +30,7 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-docker-
 
-    # Step 4: Log into Docker Hub (or another registry)
+    # Step 4: Log into Docker Hub
     - name: Log in to Docker Hub
       uses: docker/login-action@v2
       with:
@@ -42,7 +42,7 @@ jobs:
       run: |
         docker build -t yourdockerhubusername/word2pdf:${{ github.sha }} .
 
-    # Step 6: Push the Docker image to Docker Hub (or another registry)
+    # Step 6: Push the Docker image to Docker Hub
     - name: Push Docker image
       run: |
         docker push yourdockerhubusername/word2pdf:${{ github.sha }}
